@@ -1,0 +1,11 @@
+Dither is a small app that is the result of my experimentation with Python,
+GTK+, mutagen and probably a few other technologies. It's probably not useful
+to you. If for some strange reason, you want to run it, just check out the
+source and run dither.py. 
+
+You can use the file chooser button to select a file (or drag and drop a file, 
+or pass it a single file as an argument) and if it's a music file with tags 
+that mutagen understands, it'll display the raw tags (except for coverart tags, 
+which can be flippin' huge). It's basically a GTK+ version of mutagen-inspect.
+
+Told you it wasn't useful.
