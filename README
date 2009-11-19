@@ -1,7 +1,8 @@
 Dither is a small app that is the result of my experimentation with Python,
 GTK+, mutagen and probably a few other technologies. It's probably not useful
 to you. If for some strange reason, you want to run it, just check out the
-source and run dither.py. 
+source and run dither.py. And install mutagen (python-mutagen on Ubuntu) if you
+don't already have it. 
 
 You can use the file chooser button to select a file (or drag and drop a file, 
 or pass it a single file as an argument) and if it's a music file with tags 

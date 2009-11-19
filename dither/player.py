@@ -17,17 +17,20 @@ class Player():
         #self.text_buffer.set_text("")
         get_metadata(widget.get_filename(), self)
 
-    def on_metadata_tree_view_drag_data_received(self, widget, context, x, y, selection, target_type, timestamp):
+    def on_dither_dialog_drag_data_received(self, widget, context, x, y, selection, target_type, timestamp):
         uri = selection.data.strip('\r\n\x00')
         uri_splitted = uri.split() # we may have more than one file dropped
         try:
-            len(uri_splitted[1])
-            #self.text_buffer.set_text("One file at a time, junior.")
+            if uri_splitted[1]:
+                self.treeview.set_headers_visible(False)
+                self.liststore.clear()
+                self.filechooserbutton.set_filename("")
+                self.liststore.append(["One file at a time, junior.", ""])
         except:
             path = get_file_path_from_dnd_dropped_uri(uri_splitted[0])
             get_metadata(path, self)
 
-    def on_metadata_tree_view_drag_motion(self, wid, context, x, y, time):
+    def on_dither_dialog_drag_motion(self, wid, context, x, y, time):
         context.drag_status(gtk.gdk.ACTION_COPY, time)
         return True
 
@@ -51,7 +54,7 @@ class Player():
         self.coverart.show()
         self.covervbox = builder.get_object("cover_vbox")
         self.covervbox.pack_start(self.coverart, True, True, 0)
-        self.treeview.drag_dest_set( gtk.DEST_DEFAULT_MOTION |
+        self.window.drag_dest_set( gtk.DEST_DEFAULT_MOTION |
            gtk.DEST_DEFAULT_HIGHLIGHT | gtk.DEST_DEFAULT_DROP,
            dnd_list, gtk.gdk.ACTION_COPY)
         builder.connect_signals(self)
@@ -84,6 +87,7 @@ def get_cover(metadata, player):
 def get_metadata(filename, player):
     """Try to extract any tags from a file that we can"""
     player.liststore.clear()
+    player.treeview.set_headers_visible(False)
     player.filechooserbutton.set_filename(filename)
     enc = locale.getpreferredencoding()
     try: 
@@ -97,6 +101,7 @@ def get_metadata(filename, player):
                         player.liststore.append([str(tag), str(data)])
                 except:
                     player.liststore.append([str(tag), str(value)])
+        player.treeview.set_headers_visible(True)
         get_cover(metadata, player)
     except AttributeError: player.liststore.append(["That's not a music file!", ""])
     except KeyboardInterrupt: raise
