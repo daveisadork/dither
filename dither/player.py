@@ -4,6 +4,7 @@ import os
 import mutagen
 import locale
 import urllib
+import coverart
 
 TARGET_TYPE_URI_LIST = 80
 dnd_list = [ ( 'text/uri-list', 0, TARGET_TYPE_URI_LIST ) ]
@@ -42,9 +43,14 @@ class Player():
         self.datacell = gtk.CellRendererText()
         self.tagcolumn = gtk.TreeViewColumn("Tag", self.tagcell, text=0)
         self.datacolumn = gtk.TreeViewColumn("Data", self.datacell, text=1)
+        self.tagcolumn.set_resizable(True)
+        self.datacolumn.set_resizable(True)
         self.treeview.append_column(self.tagcolumn)
         self.treeview.append_column(self.datacolumn)
-
+        self.coverart = coverart.CoverArtDisplay()
+        self.coverart.show()
+        self.covervbox = builder.get_object("cover_vbox")
+        self.covervbox.pack_start(self.coverart, True, True, 0)
         self.treeview.drag_dest_set( gtk.DEST_DEFAULT_MOTION |
            gtk.DEST_DEFAULT_HIGHLIGHT | gtk.DEST_DEFAULT_DROP,
            dnd_list, gtk.gdk.ACTION_COPY)
@@ -71,6 +77,10 @@ def get_file_path_from_dnd_dropped_uri(uri):
     path = path.strip('\r\n\x00') # remove \r\n and NULL
     return path
 
+def get_cover(metadata, player):
+    #player.coverart.set_from_file('/home/dhayes/boxfront.jpg')
+    pass
+
 def get_metadata(filename, player):
     """Try to extract any tags from a file that we can"""
     player.liststore.clear()
@@ -87,6 +97,7 @@ def get_metadata(filename, player):
                         player.liststore.append([str(tag), str(data)])
                 except:
                     player.liststore.append([str(tag), str(value)])
+        get_cover(metadata, player)
     except AttributeError: player.liststore.append(["That's not a music file!", ""])
     except KeyboardInterrupt: raise
     except TypeError:
