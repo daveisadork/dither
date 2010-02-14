@@ -3,7 +3,8 @@ import os.path
 import sys
 from optparse import OptionParser
 
-sys.path.insert(0, '.')
+program_dir = os.path.abspath(os.path.dirname(__file__))
+sys.path.insert(0, program_dir)
 
 parser = OptionParser()
 

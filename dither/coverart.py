@@ -1,5 +1,6 @@
 import gtk
 from gtk import DrawingArea
+from dither.player import *
 
 class CoverArtDisplay(DrawingArea):
     aspect=True
@@ -48,7 +49,7 @@ class CoverArtDisplay(DrawingArea):
             context.fill_preserve()
         # Check if there is an image.
         if not self.pixbuf:
-            self.set_from_file("resources/no_artwork.svg")
+            self.set_from_file(os.path.join(program_dir, "resources/no_artwork.svg"))
             return
         width, height = resizeToFit(
             (self.pixbuf.get_width(), self.pixbuf.get_height()),

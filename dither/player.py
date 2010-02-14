@@ -4,7 +4,10 @@ import os
 import mutagen
 import locale
 import urllib
-import coverart
+import dither.coverart
+
+
+PROGRAM_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
 
 TARGET_TYPE_URI_LIST = 80
 dnd_list = [ ( 'text/uri-list', 0, TARGET_TYPE_URI_LIST ) ]
@@ -36,7 +39,7 @@ class Player():
 
     def __init__(self, args):
         builder = gtk.Builder()
-        builder.add_from_file("resources/dither.xml")
+        builder.add_from_file(os.path.join(PROGRAM_DIR, "resources/dither.xml"))
         self.window = builder.get_object("dither_dialog")
         self.filechooserbutton = builder.get_object("file_chooser_button")
         self.treeview = builder.get_object("metadata_tree_view")
@@ -50,7 +53,7 @@ class Player():
         self.datacolumn.set_resizable(True)
         self.treeview.append_column(self.tagcolumn)
         self.treeview.append_column(self.datacolumn)
-        self.coverart = coverart.CoverArtDisplay()
+        self.coverart = dither.coverart.CoverArtDisplay()
         self.coverart.show()
         self.covervbox = builder.get_object("cover_vbox")
         self.covervbox.pack_start(self.coverart, True, True, 0)
